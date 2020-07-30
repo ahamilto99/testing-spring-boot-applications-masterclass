@@ -13,14 +13,15 @@ import static org.mockito.Mockito.*;
 class BookSynchronizationListenerTest {
 
   private final static String VALID_ISBN = "1234567891234";
+
+  @InjectMocks
+  private BookSynchronizationListener cut;
+
   @Mock
   private BookRepository bookRepository;
 
   @Mock
   private OpenLibraryApiClient openLibraryApiClient;
-
-  @InjectMocks
-  private BookSynchronizationListener cut;
 
   @Captor
   private ArgumentCaptor<Book> bookArgumentCaptor;
@@ -56,7 +57,6 @@ class BookSynchronizationListenerTest {
 
   @Test
   public void shouldStoreBookWhenNewAndCorrectIsbn() {
-
     BookSynchronization bookSynchronization = new BookSynchronization(VALID_ISBN);
     when(bookRepository.findByIsbn(VALID_ISBN)).thenReturn(null);
 
