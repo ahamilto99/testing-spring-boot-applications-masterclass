@@ -1,11 +1,15 @@
 package de.rieckpil.courses.book.review;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+
+import java.util.List;
 
 import static de.rieckpil.courses.book.review.RandomReviewParameterResolverExtension.RandomReview;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -59,11 +63,27 @@ class ReviewVerifierTest {
   }
 
   @Test
-  void shouldPassWhenReviewIsGood() throws InterruptedException {
+  void shouldPassWhenReviewIsGood() {
     String review = "I can totally recommend this book " +
       "who is interested in learning how to write Java code!";
 
     boolean result = reviewVerifier.doesMeetQualityStandards(review);
     assertTrue(result, "ReviewVerifier did not pass a good review");
+  }
+
+  @Test
+  void shouldPassWhenReviewIsGoodHamcrest() {
+    String review = "I can totally recommend this book " +
+      "who is interested in learning how to write Java code!";
+
+    boolean result = reviewVerifier.doesMeetQualityStandards(review);
+    // assertTrue(result, "ReviewVerifier did not pass a good review"); JUnit 5 Assertions
+
+    MatcherAssert.assertThat("ReviewVerifier did not pass a good review", result, Matchers.equalTo(true));
+    MatcherAssert.assertThat("Lorem ipsum", Matchers.endsWith("ipsum"));
+    MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.hasSize(5));
+    MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.anyOf(Matchers.hasSize(5), Matchers.emptyIterable()));
+    // MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.allOf(Matchers.hasSize(5), Matchers.emptyIterable()));
+    MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.not(Matchers.emptyIterable()));
   }
 }
