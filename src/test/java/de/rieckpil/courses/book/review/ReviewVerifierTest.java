@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import java.util.List;
 
 import static de.rieckpil.courses.book.review.RandomReviewParameterResolverExtension.RandomReview;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -85,5 +86,19 @@ class ReviewVerifierTest {
     MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.anyOf(Matchers.hasSize(5), Matchers.emptyIterable()));
     // MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.allOf(Matchers.hasSize(5), Matchers.emptyIterable()));
     MatcherAssert.assertThat(List.of(1, 2, 3, 4, 5), Matchers.not(Matchers.emptyIterable()));
+  }
+
+  @Test
+  void shouldPassWhenReviewIsGoodAssertJ() {
+    String review = "I can totally recommend this book " +
+      "who is interested in learning how to write Java code!";
+
+    boolean result = reviewVerifier.doesMeetQualityStandards(review);
+    // assertTrue(result, "ReviewVerifier did not pass a good review"); JUnit 5 Assertions
+
+    assertThat(result).withFailMessage("ReviewVerifier did not pass a good review").isEqualTo(true);
+    assertThat(result).isTrue();
+    assertThat(result).isNotEqualTo(false);
+    assertThat(List.of(1, 2, 3, 4, 5)).contains(2).isNotEmpty().hasSizeBetween(1, 10);
   }
 }
