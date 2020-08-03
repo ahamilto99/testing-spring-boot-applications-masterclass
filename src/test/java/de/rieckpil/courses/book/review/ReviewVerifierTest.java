@@ -11,8 +11,7 @@ import static de.rieckpil.courses.book.review.RandomReviewParameterResolverExten
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-@ExtendWith(RandomReviewParameterResolver.class)
+@ExtendWith(RandomReviewParameterResolverExtension.class)
 class ReviewVerifierTest {
 
   private ReviewVerifier reviewVerifier;
