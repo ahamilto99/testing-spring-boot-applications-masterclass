@@ -38,6 +38,7 @@ Start writing efficient tests for your database layer while utilizing Spring Boo
 * Show setup of @DataJpaTest with a service layer
 * Verify custom query of the repository
 * Demo Pitfalls of the normal EntityManager (first-level cache), missing default constructor
+* Using the `TestEntityManager`
 
 * P6SPY to detect database commits
 * Using @Sql to prepare data
