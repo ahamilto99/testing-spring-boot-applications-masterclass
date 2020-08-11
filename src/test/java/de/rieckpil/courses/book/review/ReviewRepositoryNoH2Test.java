@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -16,6 +17,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
@@ -70,6 +72,14 @@ class ReviewRepositoryNoH2Test {
 
     System.out.println(result);
     System.out.println(dataSource.getConnection().getMetaData().getDatabaseProductName());
+  }
+
+  @Test
+  @Sql(scripts = "/scripts/INIT_REVIEW_EACH_BOOK.sql")
+  public void shouldGetTwoReviewStatisticWhenDatabaseContainsTwoBooksWithReviews() {
+    assertEquals(3, reviewRepository.count());
+    assertEquals(2, reviewRepository.getReviewStatistics().size());
+    reviewRepository.getReviewStatistics().forEach(reviewStatistic -> System.out.println(reviewStatistic));
   }
 
 }
