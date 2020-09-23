@@ -1,10 +1,10 @@
-# Testing Spring Boot Applications [Masterclass](https://rieckpil.de/testing-spring-boot-applications-masterclass/)
+[![Masterclass](https://rieckpil.de/wp-content/uploads/2020/09/testing-spring-boot-applications-masterclass-course-logo.png)](https://rieckpil.de/testing-spring-boot-applications-masterclass/)
+
+# Local Project Setup
 
 [![Build & Test Maven Project](https://github.com/rieckpil/testing-spring-boot-applications-masterclass/workflows/Build%20&%20Test%20Maven%20Project/badge.svg)](https://github.com/rieckpil/testing-spring-boot-applications-masterclass/actions)
 
-## Local Project Setup
-
-### Requirements
+## Requirements
 
 Mandatory requirements:
 
@@ -42,7 +42,7 @@ Optional requirements:
 * Maven 3.6 (Project includes also the Maven Wrapper)
 * IntelliJ IDEA or any IDE/Code Editor (Eclipse, NetBeans, Code, Atom, etc.)
 
-### Running the project
+## Running the project
 
 Assuming your local setups meets all requirments stated above, you can now start the application:
 
@@ -57,9 +57,31 @@ Valid application users:
 * duke (password `dukeduke`)
 * mike (password `mikemike`)
 
-## Further resources and links
+# Further resources and links
 
 * [Course Landing Page with FAQ](https://rieckpil.de/testing-spring-boot-applications-masterclass/)
 * [Course overview](https://rieckpil.de/courses/testing-spring-boot-applications-masterclass/)
 * [Course login](https://rieckpil.de/wp-login.php)
 * [Password reset](https://rieckpil.de/wp-login.php?action=lostpassword)
+
+# Troubleshooting setup issues
+
+## The Keycloak Docker container terminates during startup
+
+Adjust the `docker-compose.yml` file and remove the setup to import Keycloak configuration on the startup:
+
+```yaml
+version: '3'
+services:
+  # ...
+  keycloak:
+    image: jboss/keycloak:11.0.0
+    environment:
+      - KEYCLOAK_USER=keycloak
+      - KEYCLOAK_PASSWORD=keycloak
+      - DB_VENDOR=h2
+    ports:
+    - 8888:8080
+```
+
+Next, start everything with `docker-compose up` and watch the following video to [configure Keycloak manually](https://vimeo.com/458246315).
