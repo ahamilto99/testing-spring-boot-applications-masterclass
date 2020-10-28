@@ -1,7 +1,7 @@
 version: '3'
 services:
   database:
-    image: postgres:12
+    image: postgres:12.3
     environment:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=test
@@ -12,6 +12,7 @@ services:
     environment:
       - KEYCLOAK_USER=keycloak
       - KEYCLOAK_PASSWORD=keycloak
+      - DB_VENDOR=h2
       - JAVA_OPTS=-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/keycloak-dump.json
     volumes:
     - ./tmp/keycloak-dump.json:/tmp/keycloak-dump.json

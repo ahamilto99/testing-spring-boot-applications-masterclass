@@ -7,10 +7,13 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8888/auth/realms/spring
+          public-key-location: classpath:id_rsa.pub
+        #issuer-uri: http://localhost:8888/auth/realms/spring
   jpa:
     hibernate:
       ddl-auto: validate
+  main:
+    allow-bean-definition-overriding: true
 cloud:
   aws:
     stack:
@@ -20,7 +23,7 @@ cloud:
 
 clients:
   open-library:
-    base-url: https://openlibrary.org
+    base-url: https://localhost:8080/shouldNotBeUsed
 
 sqs:
-  book-synchronization-queue: default
+  book-synchronization-queue: test-default

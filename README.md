@@ -1,121 +1,87 @@
-# Course Structure
+[![Masterclass](https://rieckpil.de/wp-content/uploads/2020/09/testing-spring-boot-applications-masterclass-course-logo.png)](https://rieckpil.de/testing-spring-boot-applications-masterclass/)
 
-## Module 1: Introduction
+# Local Project Setup
 
-### Required setup
+[![Build & Test Maven Project](https://github.com/rieckpil/testing-spring-boot-applications-masterclass/workflows/Build%20&%20Test%20Maven%20Project/badge.svg)](https://github.com/rieckpil/testing-spring-boot-applications-masterclass/actions)
 
-Estimated duration: _~ 10 min_
+## Requirements
 
-* Docker and Docker-Compose
-* Java 14
-* Node 12
-* Maven 3.6 is used, there'll be an own section about Gradle
-* TypeScript and ReactJS
+Mandatory requirements:
 
-### Application Presentation
+* Java 14 (JDK flavour (OpenJDK/Azul/Oracle) does not matter). For the correct Java version setup I can recommend [JEnv](https://www.youtube.com/watch?v=9FVZyeFDXo0) (Mac/Linux) and the [Maven Toolchains Plugin](https://maven.apache.org/plugins/maven-toolchains-plugin/toolchains/jdk.html) (Windows)
 
-Estimated duration: _~ 20 min_
+```
+$ java -version
+openjdk version "14.0.1" 2020-04-14
+OpenJDK Runtime Environment AdoptOpenJDK (build 14.0.1+7)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 14.0.1+7, mixed mode, sharing)
+```
 
-* Show the architectural diagram (messaging, network call, database)
-* Show some code examples
-* Show how it is configured (security, AWS)
-* Show Keycloak admin interface
-* Explain uses cases of the app
-* Users:
-  * `duke` with `dukeduke`
-  * `mike` with `mikemike`
+* Docker Engine (Community Edition is enough) and Docker Compose
 
-### Testing techniques
+```
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.12
+ API version:       1.40
+ Go version:        go1.13.10
+ Git commit:        48a66213fe
+ Built:             Mon Jun 22 15:41:33 2020
+ OS/Arch:           darwin/amd64
+ Experimental:      false
 
-* Show tree with unit/integration test
+$ docker-compose version
+docker-compose version 1.26.2, build eefe0d31
+docker-py version: 4.2.2
+CPython version: 3.7.7
+OpenSSL version: OpenSSL 1.1.1g  21 Apr 2020
+```
 
-## Module 2: Testing with Spring Boot Starter Test
+Optional requirements:
 
-* Project setup
-    * Show `spring-boot-starter-test`
+* Maven 3.6 (Project includes also the Maven Wrapper)
+* IntelliJ IDEA or any IDE/Code Editor (Eclipse, NetBeans, Code, Atom, etc.)
 
+## Running the project
 
-### Testing with JUnit 5
+Assuming your local setups meets all requirments stated above, you can now start the application:
 
-Estimated duration: _~ 30 min_
+1. Ensure you can build the project `mvn clean verify`
+2. Start the required infrastructure components with `docker-compose up`
+3. Run the application with `mvn spring-boot:run` or inside your IDE
+4. Access http://localhost:8080 for the application frontend
+5. (Optional) Access http://localhost:8888 for the Keycloak Admin interface
 
-* How to write a first test
-* Run the test
-* Lifecycle
-* Explain some concepts using the simplest code (our validator)
-* ParameterizedTest
-* Show extension based on UUID generator
-* Parallelize unit tests
+Valid application users:
 
-### Mocking with Mockito
+* duke (password `dukeduke`)
+* mike (password `mikemike`)
 
-Estimated duration: _~ 20 min_
+# Further resources and links
 
-* Mock out classes (doThrow, doReturn, etc.)
-* MockitoExtension
-* Verify the execution on them
-* Stubs vs. Mocks
+* [Course Landing Page with FAQ](https://rieckpil.de/testing-spring-boot-applications-masterclass/)
+* [Course overview](https://rieckpil.de/courses/testing-spring-boot-applications-masterclass/)
+* [Course login](https://rieckpil.de/wp-login.php)
+* [Password reset](https://rieckpil.de/wp-login.php?action=lostpassword)
 
-### Other test dependencies
+# Troubleshooting setup issues
 
-Estimated duration: _~ 20 min_
+## The Keycloak Docker container terminates during startup
 
-* Show Hamcrest
-* Show AssertJ
-* JsonPath and JSONAssert
+Adjust the `docker-compose.yml` file and remove the setup to import Keycloak configuration on the startup:
 
-## Module 3: ?
+```yaml
+version: '3'
+services:
+  # ...
+  keycloak:
+    image: jboss/keycloak:11.0.0
+    environment:
+      - KEYCLOAK_USER=keycloak
+      - KEYCLOAK_PASSWORD=keycloak
+      - DB_VENDOR=h2
+    ports:
+    - 8888:8080
+```
 
-## Module 4: Testing database access with @DataJpaTest
-
-Estimated duration: _~ 30 min_
-
-* Introduction to Testcontainers
-* Use embedded database pros/cons
-* Show usage of PostgreSQL as containers using Testcontainers
-* Prepare data with @Sql
-* Show `TestEntityManager` and pitfall of first level cache
-* Cleanup data after tests
-
-## Module 5: Testing the REST layer
-
-Estimated duration: _~ 20 - 30 min_
-
-* MockMvc
-* Show how to include security
-* Test some calls
-
-## Module 6: Writing tests with the whole Spring Context
-
-Estimated duration: _~ 60 min_
-
-* Introduction to WireMock
-* Making sure Resource Server is working
-* Mock external call to WireMock
-* Prepare AWS infrastructure with LocalStack
-
-* Testing SQS message consumption
-* Use WebTestClient to model a use case
-
-## Module 7: Writing web tests
-
-Estimated duration: _~ 20 - 30 min_
-
-* Happy-path using a WebTest
-* Take a look at Selenide
-* Write WT with Selenium
-    * Write extension for screenshot failures
-    * Show how to record the screen
-
-
-## Module 8: Best practices for testing
-
-Estimated duration: _20 - 30 min_
-
-* Use Failsafe and Surefire and their reports for visualization in CI pipelines
-* Context Caching
-* Avoid @MockBean and lot of new contexts to be loaded
-* given/when/then
-* CUT naming
-* Make test reproducible and platform independent
-* Make test setup simple
+Next, start everything with `docker-compose up` and watch the following video to [configure Keycloak manually](https://vimeo.com/458246315).
