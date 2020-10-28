@@ -13,6 +13,7 @@ import de.rieckpil.courses.initializer.RSAKeyGenerator;
 import de.rieckpil.courses.initializer.WireMockInitializer;
 import de.rieckpil.courses.stubs.OAuth2Stubs;
 import de.rieckpil.courses.stubs.OpenLibraryStubs;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,10 +24,7 @@ import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.*;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
@@ -52,13 +50,11 @@ class BookSynchronizationListenerIT {
   static PostgreSQLContainer database = (PostgreSQLContainer) new PostgreSQLContainer("postgres:12.3")
     .withDatabaseName("test")
     .withUsername("duke")
-    .withPassword("s3cret")
-    .withReuse(true);
+    .withPassword("s3cret");
 
   static LocalStackContainer localStack = new LocalStackContainer("0.10.0")
     .withServices(SQS)
-    .withEnv("DEFAULT_REGION", "eu-central-1")
-    .withReuse(true);
+    .withEnv("DEFAULT_REGION", "eu-central-1");
 
   private static final String QUEUE_NAME = UUID.randomUUID().toString();
   private static final String ISBN = "9780596004651";
@@ -121,6 +117,11 @@ class BookSynchronizationListenerIT {
 
   @BeforeEach
   public void cleanUp() {
+    this.bookRepository.deleteAll();
+  }
+
+  @AfterEach
+  public void tearDown() {
     this.bookRepository.deleteAll();
   }
 
@@ -189,5 +190,4 @@ class BookSynchronizationListenerIT {
           .jsonPath("$[0].isbn").isEqualTo(ISBN);
       });
   }
-
 }

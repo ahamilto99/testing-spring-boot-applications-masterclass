@@ -46,16 +46,14 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTest {
 
-  static PostgreSQLContainer database = (PostgreSQLContainer) new PostgreSQLContainer("postgres:12.3")
+  static PostgreSQLContainer<?> database = new PostgreSQLContainer<>("postgres:12.3")
     .withDatabaseName("test")
     .withUsername("duke")
-    .withPassword("s3cret")
-    .withReuse(true);
+    .withPassword("s3cret");
 
   static LocalStackContainer localStack = new LocalStackContainer("0.10.0")
     .withServices(SQS)
-    .withEnv("DEFAULT_REGION", "eu-central-1")
-    .withReuse(true);
+    .withEnv("DEFAULT_REGION", "eu-central-1");
 
   static {
     database.start();

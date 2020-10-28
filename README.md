@@ -44,9 +44,9 @@ Optional requirements:
 
 ## Running the project
 
-Assuming your local setups meets all requirments stated above, you can now start the application:
+Assuming your local setups meets all requirements stated above, you can now start the application:
 
-1. Ensure you can build the project `mvn clean verify`
+1. Make sure your Docker Engine is up- and running
 2. Start the required infrastructure components with `docker-compose up`
 3. Run the application with `mvn spring-boot:run` or inside your IDE
 4. Access http://localhost:8080 for the application frontend
@@ -57,14 +57,36 @@ Valid application users:
 * duke (password `dukeduke`)
 * mike (password `mikemike`)
 
+## Running the tests
+
+To run all **unit** tests: `mvn test`
+
+To run all **integration & web** tests:
+
+1. Make sure no Docker container is currently running: `docker ps`
+2. Execute `mvn failsafe:integration-test && mvn failsafe:verify`
+
+To run **all tests** together:
+
+1. Make sure no Docker container is currently running: `docker ps`
+2. Execute `mvn verify`
+
 # Further resources and links
 
-* [Course Landing Page with FAQ](https://rieckpil.de/testing-spring-boot-applications-masterclass/)
+* [Course Landing Page with FAQ](https://rieckpil.de/testing-spring-boot-applications-masterclass/#FAQ)
 * [Course overview](https://rieckpil.de/courses/testing-spring-boot-applications-masterclass/)
 * [Course login](https://rieckpil.de/wp-login.php)
 * [Password reset](https://rieckpil.de/wp-login.php?action=lostpassword)
 
 # Troubleshooting setup issues
+
+## The tests are failing, but I still want to build the project
+
+You can pass `-DskipTests` to `mvn clean verify` if you experience test failures: `mvn clean verify -DskipTests`
+
+Next, make sure you have the latest version of this project (run `git pull`) and ensure the [build status is green](https://github.com/rieckpil/testing-spring-boot-applications-masterclass/actions).
+
+If you still encounter any test failures, please [create an issue](https://github.com/rieckpil/testing-spring-boot-applications-masterclass/issues) and include information about your environment.
 
 ## The Keycloak Docker container terminates during startup
 
